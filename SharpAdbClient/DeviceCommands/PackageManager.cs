@@ -132,13 +132,17 @@ namespace SharpAdbClient.DeviceCommands
 
             PackageManagerReceiver pmr = new PackageManagerReceiver(this.Device, this);
 
-            if (this.ThirdPartyOnly)
+            this.client.ExecuteShellCommand(this.Device, this.ThirdPartyOnly ? ListThirdPartyOnly : ListFull, pmr);
+            
+            if (pmr.PackageManager.Packages.Count == 0)
             {
-                this.client.ExecuteShellCommand(this.Device, ListThirdPartyOnly, pmr);
-            }
-            else
-            {
-                this.client.ExecuteShellCommand(this.Device, ListFull, pmr);
+                // if we got no packages, it probably through an error on having a second user account that ADB can't access i.e. a work profile.
+
+                var cor = new ConsoleOutputReceiver() { Trim = true };
+                this.client.ExecuteShellCommand(this.Device, "am get-current-user", cor);
+                var user = cor.ToString();
+
+                this.client.ExecuteShellCommand(this.Device, $"{(this.ThirdPartyOnly ? ListThirdPartyOnly : ListFull)} --user {user}", pmr);
             }
         }
 

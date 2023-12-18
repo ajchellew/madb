@@ -20,6 +20,8 @@ namespace SharpAdbClient
     {
         private const RegexOptions DefaultRegexOptions = RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase;
 
+        public bool Trim { get; set; }
+
         /// <summary>
         /// The logger to use when logging messages.
         /// </summary>
@@ -49,7 +51,12 @@ namespace SharpAdbClient
         /// </returns>
         public override string ToString()
         {
-            return this.output.ToString();
+            var result = this.output.ToString();
+            if (Trim)
+            {
+                result = result.Trim();
+            }
+            return result;
         }
 
         /// <summary>

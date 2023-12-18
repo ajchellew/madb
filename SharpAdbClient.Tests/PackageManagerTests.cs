@@ -2,6 +2,7 @@
 using SharpAdbClient.DeviceCommands;
 using System;
 using System.IO;
+using System.Linq;
 using Moq;
 
 namespace SharpAdbClient.Tests
@@ -135,5 +136,20 @@ namespace SharpAdbClient.Tests
             Assert.Equal(11062448, versionInfo.VersionCode);
             Assert.Equal("11.0.62 (448-160311229)", versionInfo.VersionName);
         }
+
+
+
+        /*[Fact]
+        public void PackagesList()
+        {
+            var adbClient = new AdbClient();
+            var devices = adbClient.GetDevices();
+            var device = devices.First();
+            var packageManager = new PackageManager(adbClient, device);
+
+            Assert.NotEmpty(packageManager.Packages);
+        }*/
+
+
     }
 }
